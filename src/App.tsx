@@ -4,14 +4,15 @@ import { ChefCard } from './components/ChefCard'
 import { StickyCart } from './components/StickyCart'
 import { MoodSearch } from './components/MoodSearch'
 import { ChefVideoPanel } from './components/ChefVideoPanel'
+import { OnboardingFlow, type OnboardingData } from './components/OnboardingFlow'
 import { CHEFS } from './data/chefs'
 import type { Chef } from './data/chefs'
 
-const TARGET = 8
 const INITIAL_CHEF_COUNT = 6
 const AI_INTERSTITIAL_AFTER = 1
 
 function App() {
+  const [onboarding, setOnboarding] = useState<OnboardingData | null>(null)
   const [cart, setCart] = useState<Record<string, number>>({})
   const [chefsShown, setChefsShown] = useState(INITIAL_CHEF_COUNT)
   const [meetChef, setMeetChef] = useState<Chef | null>(null)
@@ -29,6 +30,12 @@ function App() {
     const id = setInterval(tick, 15000)
     return () => clearInterval(id)
   }, [])
+
+  if (!onboarding) {
+    return <OnboardingFlow onComplete={setOnboarding} />
+  }
+
+  const TARGET = onboarding.meals
 
   const totalSelected = Object.values(cart).reduce((s, n) => s + n, 0)
   const cartFull = totalSelected >= TARGET
@@ -74,7 +81,9 @@ function App() {
             Step 3 of 5
           </div>
           <h1 className="font-display text-4xl md:text-5xl text-cu-ink mt-2 leading-tight">
-            Discover dishes from the world's best chefs
+            {onboarding.name
+              ? `${onboarding.name.trim().split(' ')[0]}, pick your ${TARGET} meals`
+              : "Discover dishes from the world's best chefs"}
           </h1>
 
           {/* Social proof stats */}
