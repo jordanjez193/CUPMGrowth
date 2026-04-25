@@ -65,33 +65,8 @@ export function HubScreen({ achievements, onSelect, onTabChange, activeTab }: Pr
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto pb-24 bg-[#F5F5F5]">
-        {/* Order journey */}
-        <div className="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Your journey</p>
-              <p className="font-bold text-[#0F1115] text-lg">{USER.totalOrders} orders completed</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[11px] text-gray-400">Next milestone</p>
-              <p className="text-sm font-semibold text-[#0F1115]">25 orders</p>
-            </div>
-          </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
-            <div
-              className="h-full bg-[#FFD333] rounded-full"
-              style={{ width: `${(USER.totalOrders / 25) * 100}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-[10px] text-gray-400">
-            {[0, 5, 10, 25].map(n => (
-              <span key={n} className={USER.totalOrders >= n ? 'text-[#0F1115] font-semibold' : ''}>{n}</span>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-gray-500">
-            <span className="font-semibold text-[#0F1115]">2 more orders</span> until your free meal reward 🎁
-          </p>
-        </div>
+        {/* Milestone path */}
+        <MilestonePath orders={USER.totalOrders} />
 
         {/* Eating stats */}
         <div className="mx-4 mt-3 bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -208,5 +183,83 @@ function BadgeCard({ achievement: a, onPress }: { achievement: Achievement; onPr
         <span className="text-[10px] font-bold text-[#0F1115] ml-2 shrink-0">{a.reward.value}</span>
       </div>
     </button>
+  )
+}
+
+const MILESTONES = [
+  { orders: 1,   label: '$5 off' },
+  { orders: 5,   label: 'Free side' },
+  { orders: 10,  label: 'Bonus XP' },
+  { orders: 25,  label: 'Free meal' },
+  { orders: 50,  label: 'Free gift' },
+  { orders: 100, label: '$50 credit' },
+]
+
+function getProgressPct(orders: number) {
+  const total = MILESTONES.length - 1
+  const passedIdx = MILESTONES.filter(m => orders >= m.orders).length - 1
+  if (passedIdx < 0) return 0
+  if (passedIdx >= total) return 100
+  const cur = MILESTONES[passedIdx].orders
+  const next = MILESTONES[passedIdx + 1].orders
+  const within = (orders - cur) / (next - cur)
+  return ((passedIdx + within) / total) * 100
+}
+
+function MilestonePath({ orders }: { orders: number }) {
+  const pct = getProgressPct(orders)
+  const nextMilestone = MILESTONES.find(m => m.orders > orders)
+  const toNext = nextMilestone ? nextMilestone.orders - orders : 0
+
+  return (
+    <div className="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Your journey</p>
+          <p className="font-bold text-[#0F1115] text-lg">{orders} orders</p>
+        </div>
+        {nextMilestone && (
+          <p className="text-xs text-gray-500 text-right">
+            <span className="font-semibold text-[#0F1115]">{toNext} more</span><br />
+            <span>to {nextMilestone.label}</span>
+          </p>
+        )}
+      </div>
+
+      {/* Node trail */}
+      <div className="relative flex items-start justify-between px-2">
+        {/* Background line */}
+        <div className="absolute left-2 right-2 top-3.5 h-0.5 bg-gray-100" />
+        {/* Progress line */}
+        <div
+          className="absolute left-2 top-3.5 h-0.5 bg-[#FFD333] transition-all duration-700"
+          style={{ width: `calc(${pct}% * (100% - 16px) / 100)` }}
+        />
+
+        {MILESTONES.map((m, i) => {
+          const passed = orders >= m.orders
+          const isNext = !passed && (i === 0 || orders >= MILESTONES[i - 1].orders)
+          return (
+            <div key={m.orders} className="flex flex-col items-center gap-1.5 relative z-10">
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border-2 transition-all ${
+                  passed
+                    ? 'bg-[#FFD333] border-[#FFD333] text-[#0F1115]'
+                    : isNext
+                    ? 'bg-white border-[#FFD333] text-[#FFD333]'
+                    : 'bg-white border-gray-200 text-gray-300'
+                }`}
+                style={isNext ? { boxShadow: '0 0 0 3px #FFD33330' } : {}}
+              >
+                {passed ? '✓' : m.orders}
+              </div>
+              <span className={`text-[8px] font-medium text-center leading-tight w-12 ${passed ? 'text-[#0F1115]' : isNext ? 'text-[#0F1115]' : 'text-gray-300'}`}>
+                {m.label}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }

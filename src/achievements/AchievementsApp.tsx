@@ -3,6 +3,7 @@ import { ACHIEVEMENTS, type Achievement } from './data'
 import { HubScreen } from './HubScreen'
 import { RewardsScreen } from './RewardsScreen'
 import { DetailSheet } from './DetailSheet'
+import { Confetti } from './Confetti'
 
 export type Screen = 'hub' | 'rewards'
 
@@ -10,11 +11,13 @@ export function AchievementsApp() {
   const [screen, setScreen] = useState<Screen>('hub')
   const [selected, setSelected] = useState<Achievement | null>(null)
   const [achievements, setAchievements] = useState(ACHIEVEMENTS)
+  const [confetti, setConfetti] = useState(false)
 
   const claimReward = (id: string) => {
     setAchievements(prev =>
       prev.map(a => a.id === id ? { ...a, reward: { ...a.reward, claimed: true } } : a)
     )
+    setConfetti(true)
   }
 
   return (
@@ -40,12 +43,13 @@ export function AchievementsApp() {
           />
         )}
 
-        {/* Detail sheet overlay */}
         <DetailSheet
           achievement={selected}
           onClose={() => setSelected(null)}
           onClaim={claimReward}
         />
+
+        <Confetti active={confetti} onDone={() => setConfetti(false)} />
       </div>
     </div>
   )

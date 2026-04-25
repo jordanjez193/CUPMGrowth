@@ -28,3 +28,18 @@ button {
 .animate-count-pop {
   animation: count-pop 1.4s ease-out forwards;
 }
+
+@keyframes confetti-fall {
+  0%   { transform: translateY(0) rotate(0deg) scaleX(1); opacity: 1; }
+  30%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(600deg) scaleX(0.5); opacity: 0; }
+}
+
+@keyframes claim-flash {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.animate-claim-flash {
+  animation: claim-flash 0.35s ease-out forwards;
+}

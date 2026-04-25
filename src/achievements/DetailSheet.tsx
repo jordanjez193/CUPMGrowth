@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { Achievement } from './data'
 
 type Props = {
@@ -24,12 +24,26 @@ export function DetailSheet({ achievement: a, onClose, onClaim }: Props) {
   const isUnlocked = a?.status === 'unlocked'
   const canClaim = isUnlocked && a && !a.reward.claimed
   const productColor = a ? PRODUCT_LINE_COLORS[a.reward.productLine] ?? '#6B7280' : '#6B7280'
+  const [claiming, setClaiming] = useState(false)
+
+  useEffect(() => {
+    if (!isOpen) setClaiming(false)
+  }, [isOpen])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
+
+  const handleClaim = () => {
+    if (!a || claiming) return
+    setClaiming(true)
+    setTimeout(() => {
+      onClaim(a.id)
+      onClose()
+    }, 700)
+  }
 
   return (
     <>
@@ -62,16 +76,7 @@ export function DetailSheet({ achievement: a, onClose, onClaim }: Props) {
                   alt={a.name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                {a.chefImage && (
-                  <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                    <img
-                      src={a.chefImage}
-                      alt="Chef"
-                      className="w-8 h-8 rounded-full object-cover border-2 border-white"
-                    />
-                  </div>
-                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                 {isUnlocked && (
                   <span className="absolute top-3 right-3 text-xl">✅</span>
                 )}
@@ -157,11 +162,14 @@ export function DetailSheet({ achievement: a, onClose, onClaim }: Props) {
             {/* CTA */}
             {canClaim ? (
               <button
-                onClick={() => { onClaim(a.id); onClose() }}
-                className="w-full py-4 rounded-2xl font-bold text-base text-[#0F1115] transition-all active:scale-95"
-                style={{ backgroundColor: '#FFD333' }}
+                onClick={handleClaim}
+                className={`w-full py-4 rounded-2xl font-bold text-base transition-all duration-300 ${
+                  claiming
+                    ? 'bg-[#22C55E] text-white scale-95 animate-claim-flash'
+                    : 'bg-[#FFD333] text-[#0F1115] active:scale-95'
+                }`}
               >
-                Claim reward →
+                {claiming ? 'Claimed ✓' : 'Claim reward →'}
               </button>
             ) : a.reward.claimed ? (
               <div className="w-full py-4 rounded-2xl font-bold text-base text-center text-gray-400 bg-gray-100">
