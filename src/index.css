@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #FAF8F3;
+  color: #0F1115;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+@keyframes count-pop {
+  0%   { color: #1F7A4D; transform: translateY(-3px) scale(1.12); }
+  50%  { color: #1F7A4D; }
+  100% { color: inherit; transform: translateY(0) scale(1); }
+}
+.animate-count-pop {
+  animation: count-pop 1.4s ease-out forwards;
+}
