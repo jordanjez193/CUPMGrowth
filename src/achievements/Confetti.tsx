@@ -18,8 +18,8 @@ function makeParticles(n = 65): Particle[] {
     id: i,
     x: 5 + Math.random() * 90,
     color: COLORS[i % COLORS.length],
-    delay: Math.random() * 0.35,
-    duration: 1.1 + Math.random() * 0.9,
+    delay: Math.random() * 0.5,
+    duration: 2.8 + Math.random() * 1.8,
     w: 6 + Math.random() * 9,
     h: 4 + Math.random() * 6,
     spin: Math.random() * 360,
@@ -32,7 +32,7 @@ export function Confetti({ active, onDone }: { active: boolean; onDone: () => vo
   useEffect(() => {
     if (!active) return
     setParticles(makeParticles())
-    const t = setTimeout(() => { setParticles([]); onDone() }, 2400)
+    const t = setTimeout(() => { setParticles([]); onDone() }, 5000)
     return () => clearTimeout(t)
   }, [active])
 
