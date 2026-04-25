@@ -133,7 +133,7 @@ function RewardCard({
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-0.5">
+          <div className="flex items-center justify-between mb-1">
             <span
               className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
               style={{ backgroundColor: `${productColor}15`, color: productColor }}
@@ -144,13 +144,16 @@ function RewardCard({
               <span className="text-[10px] text-gray-400 font-medium">Claimed ✓</span>
             )}
             {!dimmed && !upcoming && (
-              <span className="text-[10px] font-bold text-[#FFD333] bg-[#FFF9E6] px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold text-[#0F1115] bg-[#FFD333] px-2 py-0.5 rounded-full">
                 Claim →
               </span>
             )}
           </div>
-          <p className="font-bold text-[#0F1115] text-sm leading-tight">{a.reward.label}</p>
-          <p className="text-[11px] text-gray-400 mt-0.5">{a.name} achievement</p>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-base font-bold text-[#0F1115]">{a.reward.value}</span>
+            <span className="text-xs text-gray-500 truncate">{a.reward.label}</span>
+          </div>
+          <p className="text-[10px] text-gray-400 mt-0.5">{a.reward.description}</p>
         </div>
       </div>
 

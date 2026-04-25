@@ -111,28 +111,20 @@ export function DetailSheet({ achievement: a, onClose, onClaim }: Props) {
             {/* Reward card */}
             <div
               className="rounded-2xl p-4 mb-5"
-              style={{ backgroundColor: `${productColor}10`, border: `1.5px solid ${productColor}30` }}
+              style={{ backgroundColor: `${productColor}10`, border: `1.5px solid ${productColor}25` }}
             >
-              <div className="flex items-start gap-3">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0"
-                  style={{ backgroundColor: `${productColor}20` }}
+              <div className="flex items-center justify-between mb-2">
+                <span
+                  className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+                  style={{ backgroundColor: `${productColor}20`, color: productColor }}
                 >
-                  {a.reward.emoji}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span
-                      className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: `${productColor}20`, color: productColor }}
-                    >
-                      {a.reward.productLine}
-                    </span>
-                  </div>
-                  <p className="font-bold text-[#0F1115] text-base leading-tight">{a.reward.label}</p>
-                  <p className="text-xs text-gray-500 mt-1">{a.reward.description}</p>
-                </div>
+                  {a.reward.productLine}
+                </span>
+                <span className="text-xs font-medium text-gray-400">Reward</span>
               </div>
+              <p className="text-2xl font-bold text-[#0F1115] mb-0.5">{a.reward.value}</p>
+              <p className="text-sm font-semibold text-[#0F1115]">{a.reward.label}</p>
+              <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">{a.reward.description}</p>
             </div>
 
             {/* CTA */}

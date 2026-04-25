@@ -1,5 +1,5 @@
 import type { Achievement } from './data'
-import { USER, LEADERBOARD } from './data'
+import { USER } from './data'
 import type { Screen } from './AchievementsApp'
 import { BottomNav } from './BottomNav'
 
@@ -49,16 +49,15 @@ export function HubScreen({ achievements, onSelect, onTabChange, activeTab }: Pr
         </div>
 
         {/* Stats row */}
-        <div className="mt-5 grid grid-cols-3 gap-3">
+        <div className="mt-5 grid grid-cols-3 gap-2">
           {[
-            { label: 'Earned', value: unlocked, icon: '🏅' },
-            { label: 'In progress', value: inProgress, icon: '⚡' },
-            { label: 'To claim', value: claimable, icon: '🎁', highlight: claimable > 0 },
+            { label: 'Earned', value: unlocked, highlight: false },
+            { label: 'In progress', value: inProgress, highlight: false },
+            { label: 'To claim', value: claimable, highlight: claimable > 0 },
           ].map(s => (
-            <div key={s.label} className={`rounded-2xl p-3 text-center ${s.highlight ? 'bg-[#FFD333]' : 'bg-white/8'}`} style={{ backgroundColor: s.highlight ? '#FFD333' : 'rgba(255,255,255,0.08)' }}>
-              <div className="text-lg mb-0.5">{s.icon}</div>
-              <div className={`text-xl font-bold ${s.highlight ? 'text-[#0F1115]' : 'text-white'}`}>{s.value}</div>
-              <div className={`text-[10px] ${s.highlight ? 'text-[#0F1115]/70' : 'text-white/40'}`}>{s.label}</div>
+            <div key={s.label} className="rounded-xl p-3 text-center" style={{ backgroundColor: s.highlight ? '#FFD333' : 'rgba(255,255,255,0.08)' }}>
+              <div className={`text-2xl font-bold tracking-tight ${s.highlight ? 'text-[#0F1115]' : 'text-white'}`}>{s.value}</div>
+              <div className={`text-[10px] font-medium mt-0.5 ${s.highlight ? 'text-[#0F1115]/60' : 'text-white/40'}`}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -94,32 +93,29 @@ export function HubScreen({ achievements, onSelect, onTabChange, activeTab }: Pr
           </p>
         </div>
 
-        {/* Friends leaderboard */}
+        {/* Eating stats */}
         <div className="mx-4 mt-3 bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-            <p className="font-semibold text-[#0F1115] text-sm">Friends Leaderboard</p>
-            <span className="text-[10px] text-gray-400">This month</span>
+          <div className="px-4 pt-4 pb-3 border-b border-gray-50">
+            <p className="font-semibold text-[#0F1115] text-sm">Your stats</p>
           </div>
-          {LEADERBOARD.map((entry, i) => (
-            <div
-              key={entry.name}
-              className={`flex items-center gap-3 px-4 py-2.5 ${entry.isYou ? 'bg-[#FFF9E6]' : ''}`}
-            >
-              <span className="text-sm w-4 text-center font-bold text-gray-400">
-                {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`}
-              </span>
-              <span className="text-lg">{entry.avatar}</span>
-              <div className="flex-1">
-                <p className={`text-sm font-semibold ${entry.isYou ? 'text-[#0F1115]' : 'text-gray-700'}`}>
-                  {entry.name} {entry.isYou && <span className="text-[10px] text-[#0F1115]/50 font-normal ml-1">You</span>}
-                </p>
-                <p className="text-[10px] text-gray-400">Level {entry.level}</p>
+          <div className="grid grid-cols-2">
+            {[
+              { label: 'Unique meals', value: USER.uniqueMeals.toString() },
+              { label: 'Proteins enjoyed', value: USER.proteinsEnjoyed.toString() },
+              { label: 'Chefs tried', value: USER.uniqueChefs.toString() },
+              { label: 'Avg rating', value: `${USER.avgRating} ★` },
+              { label: 'Top chef', value: USER.topChef, wide: true },
+              { label: 'Favorite meal', value: USER.favoriteMeal, wide: true },
+            ].map((s, i) => (
+              <div
+                key={s.label}
+                className={`px-4 py-3 ${i % 2 === 0 && !s.wide ? 'border-r border-gray-50' : ''} ${i >= 2 ? 'border-t border-gray-50' : ''} ${s.wide ? 'col-span-2' : ''}`}
+              >
+                <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-0.5">{s.label}</p>
+                <p className="text-sm font-semibold text-[#0F1115] truncate">{s.value}</p>
               </div>
-              <span className={`text-xs font-bold ${entry.isYou ? 'text-[#0F1115]' : 'text-gray-500'}`}>
-                {entry.points} pts
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Badge grid */}
@@ -193,9 +189,9 @@ function BadgeCard({ achievement: a, onPress }: { achievement: Achievement; onPr
       </div>
 
       {/* Reward preview */}
-      <div className="mt-2.5 flex items-center gap-1.5 bg-gray-50 rounded-xl px-2.5 py-1.5">
-        <span className="text-xs">{a.reward.emoji}</span>
-        <span className="text-[10px] font-medium text-gray-600 truncate">{a.reward.label}</span>
+      <div className="mt-2.5 flex items-center justify-between bg-gray-50 rounded-xl px-2.5 py-1.5">
+        <span className="text-[10px] font-medium text-gray-500 truncate">{a.reward.label}</span>
+        <span className="text-[10px] font-bold text-[#0F1115] ml-2 shrink-0">{a.reward.value}</span>
       </div>
     </button>
   )

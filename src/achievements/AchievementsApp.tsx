@@ -21,7 +21,7 @@ export function AchievementsApp() {
     <div className="min-h-screen bg-gray-100 flex items-start justify-center py-0 md:py-8">
       <div
         className="relative bg-white w-full md:max-w-[390px] md:rounded-[2.5rem] md:shadow-2xl overflow-hidden"
-        style={{ minHeight: '100dvh' }}
+        style={{ height: '100dvh' }}
       >
         {screen === 'hub' && (
           <HubScreen

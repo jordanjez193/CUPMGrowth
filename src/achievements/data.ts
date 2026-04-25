@@ -42,11 +42,12 @@ export const USER = {
   xp: 230,
   xpForNextLevel: 300,
   streak: 4,
-  chefsTried: 5,
-  cuisinesTried: 4,
-  plantBasedMeals: 2,
-  breakfastOrders: 0,
-  bundleOrders: 0,
+  uniqueMeals: 18,
+  proteinsEnjoyed: 6,
+  uniqueChefs: 5,
+  topChef: 'Marcus Samuelsson',
+  favoriteMeal: 'Miso-Glazed Salmon',
+  avgRating: 4.7,
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
