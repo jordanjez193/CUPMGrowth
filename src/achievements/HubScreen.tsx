@@ -104,17 +104,31 @@ export function HubScreen({ achievements, onSelect, onTabChange, activeTab }: Pr
               { label: 'Proteins enjoyed', value: USER.proteinsEnjoyed.toString() },
               { label: 'Chefs tried', value: USER.uniqueChefs.toString() },
               { label: 'Avg rating', value: `${USER.avgRating} ★` },
-              { label: 'Top chef', value: USER.topChef, wide: true },
-              { label: 'Favorite meal', value: USER.favoriteMeal, wide: true },
             ].map((s, i) => (
               <div
                 key={s.label}
-                className={`px-4 py-3 ${i % 2 === 0 && !s.wide ? 'border-r border-gray-50' : ''} ${i >= 2 ? 'border-t border-gray-50' : ''} ${s.wide ? 'col-span-2' : ''}`}
+                className={`px-4 py-3 ${i % 2 === 0 ? 'border-r border-gray-50' : ''} ${i >= 2 ? 'border-t border-gray-50' : ''}`}
               >
                 <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-0.5">{s.label}</p>
-                <p className="text-sm font-semibold text-[#0F1115] truncate">{s.value}</p>
+                <p className="text-sm font-semibold text-[#0F1115]">{s.value}</p>
               </div>
             ))}
+            {/* Top chef */}
+            <div className="col-span-2 border-t border-gray-50 px-4 py-3 flex items-center gap-3">
+              <img src={USER.topChefPhoto} alt={USER.topChef} className="w-10 h-10 rounded-full object-cover shrink-0" />
+              <div className="min-w-0">
+                <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-0.5">Top chef</p>
+                <p className="text-sm font-semibold text-[#0F1115]">{USER.topChef}</p>
+              </div>
+            </div>
+            {/* Favorite meal */}
+            <div className="col-span-2 border-t border-gray-50 px-4 py-3 flex items-center gap-3">
+              <img src={USER.favoriteMealImage} alt={USER.favoriteMeal} className="w-10 h-10 rounded-xl object-cover shrink-0" />
+              <div className="min-w-0">
+                <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-0.5">Favorite meal</p>
+                <p className="text-sm font-semibold text-[#0F1115] truncate">{USER.favoriteMeal}</p>
+              </div>
+            </div>
           </div>
         </div>
 

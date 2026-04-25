@@ -23,6 +23,8 @@ export type Achievement = {
   reward: Reward
   unlockedDate?: string
   color: string
+  image?: string
+  chefImage?: string
 }
 
 export type LeaderboardEntry = {
@@ -45,8 +47,10 @@ export const USER = {
   uniqueMeals: 18,
   proteinsEnjoyed: 6,
   uniqueChefs: 5,
-  topChef: 'Marcus Samuelsson',
-  favoriteMeal: 'Miso-Glazed Salmon',
+  topChef: 'Michelle Bernstein',
+  topChefPhoto: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Michelle_Bernstein_83fe5b895f.png',
+  favoriteMeal: 'Walnut Miso-Crusted Salmon',
+  favoriteMealImage: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/w/a/walnut_miso_crusted_salmon.jpeg?height=400&width=400&fit=crop&format=webp',
   avgRating: 4.7,
 }
 
@@ -64,6 +68,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     status: 'unlocked',
     unlockedDate: 'Jan 12, 2025',
     color: '#FFD333',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/b/e/beef_bibimbap_with_white_rice_-_choi-3.jpg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Esther_Choi_93538d0d78.png',
     reward: {
       emoji: '💰',
       label: '$5 off your next order',
@@ -85,6 +91,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     status: 'unlocked',
     unlockedDate: 'Feb 3, 2025',
     color: '#FF6B2B',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/c/u/cuban-pork.jpg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Michelle_Bernstein_83fe5b895f.png',
     reward: {
       emoji: '🍟',
       label: 'Free side dish on us',
@@ -106,6 +114,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     status: 'unlocked',
     unlockedDate: 'Mar 18, 2025',
     color: '#7C3AED',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/m/a/macandcheese-johndl.jpeg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/John_De_Lucie_0e67d16f7f.png',
     reward: {
       emoji: '⭐',
       label: 'Free premium meal upgrade',
@@ -127,6 +137,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     status: 'unlocked',
     unlockedDate: 'Apr 1, 2025',
     color: '#0EA5E9',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/w/a/walnut_miso_crusted_salmon.jpeg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Esther_Choi_93538d0d78.png',
     reward: {
       emoji: '💳',
       label: '$10 credit',
@@ -149,6 +161,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 25,
     status: 'in-progress',
     color: '#F59E0B',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/b/r/braised-rib.jpg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Michelle_Bernstein_83fe5b895f.png',
     reward: {
       emoji: '🎁',
       label: 'A free meal, on us',
@@ -169,6 +183,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 1,
     status: 'in-progress',
     color: '#F97316',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/d/u/dustin-chorizobreakfast.jpg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Dustin_Taylor_cead58110f.png',
     reward: {
       emoji: '🥐',
       label: 'Free breakfast meal',
@@ -189,6 +205,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 3,
     status: 'in-progress',
     color: '#22C55E',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/m/e/me_chili.jpeg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Einat_Admony_48dc7c25ca.png',
     reward: {
       emoji: '🥗',
       label: 'Free plant-based meal',
@@ -209,6 +227,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 6,
     status: 'in-progress',
     color: '#3B82F6',
+    image: 'https://cu-media.imgix.net/meal-service/meals/6795/main_image/6795_Pierre_Thaim_Oxtail_Stew_6608.jpg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Pierre_Thiam_dd218212cb.png',
     reward: {
       emoji: '🌐',
       label: 'Global cuisine bundle',
@@ -231,6 +251,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 1,
     status: 'locked',
     color: '#6B7280',
+    image: 'https://cu-media.imgix.net/meal-service/meals/2682/main_image/2682_Akhtar-Nawab_Southern-Soul-Gumbo_WB_LowRes-35.jpg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Akhtar_Nawab_fa5119959c.png',
     reward: {
       emoji: '📦',
       label: '20% off your next bundle',
@@ -251,6 +273,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 1,
     status: 'locked',
     color: '#EC4899',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/m/i/michelle_bernstein_chicken_parm.jpg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Michelle_Bernstein_83fe5b895f.png',
     reward: {
       emoji: '🧒',
       label: 'Free kids meal',
@@ -271,6 +295,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 50,
     status: 'locked',
     color: '#6B7280',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/s/u/sunday_sauce_rigatoni_with_meatballs_-_3564.jpeg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/John_De_Lucie_0e67d16f7f.png',
     reward: {
       emoji: '🎉',
       label: 'Free meal to share',
@@ -291,6 +317,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     target: 100,
     status: 'locked',
     color: '#6B7280',
+    image: 'https://cu-media.imgix.net/media/catalog/product/cache/x1200/m/a/macandcheese-johndl.jpeg?height=600&width=800&fit=crop&format=webp',
+    chefImage: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/John_De_Lucie_0e67d16f7f.png',
     reward: {
       emoji: '💎',
       label: '$50 account credit',

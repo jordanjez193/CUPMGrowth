@@ -53,21 +53,48 @@ export function DetailSheet({ achievement: a, onClose, onClaim }: Props) {
         </div>
 
         {a && (
-          <div className="px-5 pb-10 pt-2">
-            {/* Badge hero */}
-            <div className="flex flex-col items-center mb-5">
-              <div
-                className="w-24 h-24 rounded-3xl flex items-center justify-center text-5xl mb-4 relative"
-                style={{
-                  backgroundColor: isUnlocked ? `${a.color}15` : '#F3F4F6',
-                  border: `3px solid ${isUnlocked ? a.color : '#E5E7EB'}`,
-                }}
-              >
-                {a.emoji}
+          <div className="pb-10">
+            {/* Hero image */}
+            {a.image && (
+              <div className="relative h-44 overflow-hidden -mx-0 mb-4">
+                <img
+                  src={a.image}
+                  alt={a.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                {a.chefImage && (
+                  <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                    <img
+                      src={a.chefImage}
+                      alt="Chef"
+                      className="w-8 h-8 rounded-full object-cover border-2 border-white"
+                    />
+                  </div>
+                )}
                 {isUnlocked && (
-                  <span className="absolute -bottom-2 -right-2 text-lg">✅</span>
+                  <span className="absolute top-3 right-3 text-xl">✅</span>
                 )}
               </div>
+            )}
+
+            <div className="px-5">
+            {/* Badge hero */}
+            <div className="flex flex-col items-center mb-5">
+              {!a.image && (
+                <div
+                  className="w-24 h-24 rounded-3xl flex items-center justify-center text-5xl mb-4 relative"
+                  style={{
+                    backgroundColor: isUnlocked ? `${a.color}15` : '#F3F4F6',
+                    border: `3px solid ${isUnlocked ? a.color : '#E5E7EB'}`,
+                  }}
+                >
+                  {a.emoji}
+                  {isUnlocked && (
+                    <span className="absolute -bottom-2 -right-2 text-lg">✅</span>
+                  )}
+                </div>
+              )}
 
               <span
                 className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-2"
@@ -148,6 +175,7 @@ export function DetailSheet({ achievement: a, onClose, onClaim }: Props) {
                 Keep going →
               </button>
             )}
+            </div>{/* /px-5 */}
           </div>
         )}
       </div>
