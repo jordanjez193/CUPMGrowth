@@ -241,19 +241,19 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                     </button>
                   )
 
-                  if (opt.id === 'foodie') {
-                    return (
-                      <div key={opt.id} className="flex flex-col gap-1.5">
-                        <p className="text-[11px] text-cu-green font-semibold flex items-center gap-1">
+                  return (
+                    <div key={opt.id} className="flex flex-col">
+                      {opt.id === 'foodie' ? (
+                        <p className="text-[11px] text-cu-green font-semibold flex items-center gap-1 mb-1.5">
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                           Select this for a demo walkthrough
                         </p>
-                        {card}
-                      </div>
-                    )
-                  }
-
-                  return <div key={opt.id}>{card}</div>
+                      ) : (
+                        <div className="h-[22px] mb-1.5" />
+                      )}
+                      {card}
+                    </div>
+                  )
                 })}
               </div>
             </div>
