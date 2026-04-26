@@ -131,7 +131,6 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
   const [zip, setZip]                 = useState('')
   const [name, setName]               = useState('')
   const [meals, setMeals]             = useState<number>(8)
-  const [mealsChosen, setMealsChosen] = useState(false)
   const [email, setEmail]             = useState('')
   const [anim, setAnim]               = useState<'in' | 'out'>('in')
   const [kitchenImgFailed, setKitchenImgFailed] = useState(false)
@@ -141,7 +140,6 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
   const kitchenInfo = zip.length === 5 ? getKitchenInfo(zip) : null
   const mealMsg     = getMealMessage(meals)
   const firstName   = name.trim().split(' ')[0]
-  const sliderPct   = ((meals - 4) / (12 - 4)) * 100
 
   const go = (next: Step) => {
     setAnim('out')
@@ -240,6 +238,11 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                         <p className="text-[11px] text-cu-slate/70 mt-1 leading-tight">
                           {opt.subtitle}
                         </p>
+                        {opt.id === 'foodie' && (
+                          <p className="text-[10px] text-cu-green font-semibold mt-2 border border-cu-green/30 rounded-full px-2 py-0.5 inline-block">
+                            ← tap to demo
+                          </p>
+                        )}
                       </div>
                     </button>
                   )
@@ -441,47 +444,47 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                   <p className="text-cu-slate text-sm">You can change this anytime.</p>
                 </div>
 
-                {/* Big number display */}
-                <div className="text-center mb-8">
-                  <span
-                    key={meals}
-                    className="font-display text-[96px] text-cu-ink leading-none animate-pop-in inline-block"
+                {/* Number + +/− controls */}
+                <div className="flex items-center justify-center gap-6 mb-8">
+                  <button
+                    onClick={() => setMeals(m => Math.max(4, m - 1))}
+                    disabled={meals <= 4}
+                    className={`w-14 h-14 rounded-full border-2 flex items-center justify-center text-2xl font-light transition-all active:scale-90 ${
+                      meals <= 4 ? 'border-cu-line text-cu-line cursor-not-allowed' : 'border-cu-ink text-cu-ink hover:bg-cu-ink hover:text-cu-yellow'
+                    }`}
                   >
-                    {meals}
-                  </span>
-                  <p className="text-cu-slate text-sm mt-1">meals per week</p>
+                    −
+                  </button>
+                  <div className="text-center w-28">
+                    <span
+                      key={meals}
+                      className="font-display text-[96px] text-cu-ink leading-none animate-pop-in inline-block"
+                    >
+                      {meals}
+                    </span>
+                    <p className="text-cu-slate text-sm -mt-1">meals / week</p>
+                  </div>
+                  <button
+                    onClick={() => setMeals(m => Math.min(12, m + 1))}
+                    disabled={meals >= 12}
+                    className={`w-14 h-14 rounded-full border-2 flex items-center justify-center text-2xl font-light transition-all active:scale-90 ${
+                      meals >= 12 ? 'border-cu-line text-cu-line cursor-not-allowed' : 'border-cu-ink text-cu-ink hover:bg-cu-ink hover:text-cu-yellow'
+                    }`}
+                  >
+                    +
+                  </button>
                 </div>
 
-                {/* Slider */}
-                <div className="px-1 mb-2">
-                  <input
-                    type="range"
-                    min={4}
-                    max={12}
-                    step={1}
-                    value={meals}
-                    onChange={e => { setMeals(Number(e.target.value)); setMealsChosen(true) }}
-                    className="meal-slider w-full"
-                    style={{ '--slider-pct': `${sliderPct}%` } as React.CSSProperties}
-                  />
-                  <div className="flex justify-between mt-2 text-[11px] text-cu-slate/60 font-medium">
-                    <span>4</span>
-                    <span>12</span>
-                  </div>
+                <div className={`p-4 rounded-2xl border transition-all ${
+                  mealMsg.highlight
+                    ? 'bg-cu-yellow/10 border-cu-yellow/40'
+                    : 'bg-white border-cu-line'
+                }`}>
+                  {mealMsg.highlight && (
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-cu-slate mb-1">Most popular choice</p>
+                  )}
+                  <p className="text-[13px] text-cu-slate leading-relaxed">{mealMsg.text}</p>
                 </div>
-
-                {mealsChosen && (
-                  <div className={`mt-5 p-4 rounded-2xl border transition-all animate-onboard-in ${
-                    mealMsg.highlight
-                      ? 'bg-cu-yellow/10 border-cu-yellow/40'
-                      : 'bg-white border-cu-line'
-                  }`}>
-                    {mealMsg.highlight && (
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-cu-slate mb-1">Most popular choice</p>
-                    )}
-                    <p className="text-[13px] text-cu-slate leading-relaxed">{mealMsg.text}</p>
-                  </div>
-                )}
               </div>
 
               <button
