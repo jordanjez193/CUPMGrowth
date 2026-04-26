@@ -42,7 +42,9 @@ const WHY_OPTIONS: { id: WhyId; title: string; subtitle: string; icon: React.Rea
     subtitle: 'Chef-curated meals at home',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M18 2v6a3 3 0 01-3 3H9a3 3 0 01-3-3V2M12 11v10M8 22h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3 2v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M7 2v20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+        <path d="M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -106,18 +108,13 @@ function getKitchenInfo(zip: string): KitchenInfo {
   const base = (kitchen: string, city: string, days: string, imageUrl: string): KitchenInfo =>
     ({ kitchen, city, days, kitchens, imageUrl })
 
-  if (n >= 10 && n <= 14) return base('Brooklyn Kitchen', 'Brooklyn, NY', '1–2',
-    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/NY_Kitchen_hero.jpg')
-  if (n >= 90 && n <= 96) return base('Los Angeles Kitchen', 'Los Angeles, CA', '1–2',
-    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/LA_Kitchen_hero.jpg')
-  if (n >= 33 && n <= 34) return base('Miami Kitchen', 'Miami, FL', '1–2',
-    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Miami_Kitchen_hero.jpg')
-  if (n >= 60 && n <= 62) return base('Chicago Kitchen', 'Chicago, IL', '1–2',
-    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Chicago_Kitchen_hero.jpg')
-  if (n >= 78 && n <= 79) return base('Texas Kitchen', 'Austin, TX', '2–3',
-    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/TX_Kitchen_hero.jpg')
-  return base('Production Kitchen', 'Nearest facility', '2–3',
-    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Kitchen_hero.jpg')
+  const kitchenImg = 'https://images.wsj.net/im-292917/?width=1280&size=1.77777778'
+  if (n >= 10 && n <= 14) return base('Brooklyn Kitchen', 'Brooklyn, NY', '1–2', kitchenImg)
+  if (n >= 90 && n <= 96) return base('Los Angeles Kitchen', 'Los Angeles, CA', '1–2', kitchenImg)
+  if (n >= 33 && n <= 34) return base('Miami Kitchen', 'Miami, FL', '1–2', kitchenImg)
+  if (n >= 60 && n <= 62) return base('Chicago Kitchen', 'Chicago, IL', '1–2', kitchenImg)
+  if (n >= 78 && n <= 79) return base('Texas Kitchen', 'Austin, TX', '2–3', kitchenImg)
+  return base('Production Kitchen', 'Nearest facility', '2–3', kitchenImg)
 }
 
 function getMealMessage(n: number): { text: string; highlight: boolean } {
@@ -353,7 +350,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                     />
                   )}
                   {/* Always show gradient + text overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
 
                   {/* Kitchen badge */}
                   <div className="absolute top-3 right-3 bg-cu-yellow text-cu-ink text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
