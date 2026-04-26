@@ -13,12 +13,23 @@ export type OnboardingData = {
 
 const STEP_ORDER: Step[] = ['why', 'reinforce', 'location', 'location-confirm', 'name', 'meals', 'email']
 
+const CHEF_PORTRAITS = [
+  { name: 'Esther Choi',       photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Esther_Choi_93538d0d78.png' },
+  { name: 'Akhtar Nawab',      photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Akhtar_Nawab_fa5119959c.png' },
+  { name: 'Michelle Bernstein',photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Michelle_Bernstein_83fe5b895f.png' },
+  { name: 'Pierre Thiam',      photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Pierre_Thiam_dd218212cb.png' },
+  { name: 'Chris Ratel',       photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Chris_Ratel_24e8f3e5f0.png' },
+  { name: 'José Garcés',       photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Jose_Garces_2c95fc141e.png' },
+  { name: 'Einat Admony',      photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Einat_Admony_48dc7c25ca.png' },
+  { name: 'John De Lucie',     photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/John_De_Lucie_0e67d16f7f.png' },
+]
+
 const WHY_OPTIONS: { id: WhyId; label: string; icon: React.ReactNode }[] = [
   {
     id: 'busy',
     label: "I'm busy and don't always have time to cook",
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/>
         <path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
@@ -28,7 +39,7 @@ const WHY_OPTIONS: { id: WhyId; label: string; icon: React.ReactNode }[] = [
     id: 'foodie',
     label: 'I really enjoy food and want chef-curated meals at home',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M18 2v6a3 3 0 01-3 3H9a3 3 0 01-3-3V2M12 11v10M8 22h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
@@ -37,7 +48,7 @@ const WHY_OPTIONS: { id: WhyId; label: string; icon: React.ReactNode }[] = [
     id: 'spending',
     label: 'I spend too much eating out',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/>
         <path d="M2 10h20" stroke="currentColor" strokeWidth="1.8"/>
       </svg>
@@ -47,7 +58,7 @@ const WHY_OPTIONS: { id: WhyId; label: string; icon: React.ReactNode }[] = [
     id: 'health',
     label: "I want to make sure I'm eating right",
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M12 22c-4.5-3-9-6.5-9-12a6 6 0 0112 0 6 6 0 0112 0c0 5.5-4.5 9-9 12z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
@@ -62,7 +73,7 @@ const REINFORCE: Record<WhyId, { headline: string; body: string; stat: string }>
   },
   foodie: {
     headline: "Chef's table,\ndelivered.",
-    body: 'CookUnity partners with 100+ award-winning chefs — James Beard nominees, Michelin veterans, Top Chef alumni — rotating 400+ dishes every week. This isn\'t meal prep. This is dining.',
+    body: "CookUnity partners with 100+ award-winning chefs — James Beard nominees, Michelin veterans, Top Chef alumni — rotating 400+ dishes every week. This isn't meal prep. This is dining.",
     stat: '100+ world-class chefs on the platform',
   },
   spending: {
@@ -72,19 +83,37 @@ const REINFORCE: Record<WhyId, { headline: string; body: string; stat: string }>
   },
   health: {
     headline: 'Eat well without\nthe guesswork.',
-    body: 'Every dish comes with full nutrition transparency and is crafted by professional chefs. Filter by keto, plant-based, high-protein, or gluten-free — and know exactly what you\'re fueling with.',
+    body: "Every dish comes with full nutrition transparency and is crafted by professional chefs. Filter by keto, plant-based, high-protein, or gluten-free — and know exactly what you're fueling with.",
     stat: 'Full macros on every single dish',
   },
 }
 
-function getKitchenInfo(zip: string): { kitchen: string; days: string } {
+type KitchenInfo = {
+  kitchen: string
+  city: string
+  days: string
+  kitchens: number
+  imageUrl: string
+}
+
+function getKitchenInfo(zip: string): KitchenInfo {
   const n = parseInt(zip.slice(0, 2))
-  if (n >= 10 && n <= 14) return { kitchen: 'our Brooklyn kitchen', days: '1–2' }
-  if (n >= 90 && n <= 96) return { kitchen: 'our Los Angeles kitchen', days: '1–2' }
-  if (n >= 33 && n <= 34) return { kitchen: 'our Miami kitchen', days: '1–2' }
-  if (n >= 60 && n <= 62) return { kitchen: 'our Chicago kitchen', days: '1–2' }
-  if (n >= 78 && n <= 79) return { kitchen: 'our Texas kitchen', days: '2–3' }
-  return { kitchen: 'our nearest production kitchen', days: '2–3' }
+  const kitchens = 6
+  const base = (kitchen: string, city: string, days: string, imageUrl: string): KitchenInfo =>
+    ({ kitchen, city, days, kitchens, imageUrl })
+
+  if (n >= 10 && n <= 14) return base('Brooklyn Kitchen', 'Brooklyn, NY', '1–2',
+    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/NY_Kitchen_hero.jpg')
+  if (n >= 90 && n <= 96) return base('Los Angeles Kitchen', 'Los Angeles, CA', '1–2',
+    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/LA_Kitchen_hero.jpg')
+  if (n >= 33 && n <= 34) return base('Miami Kitchen', 'Miami, FL', '1–2',
+    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Miami_Kitchen_hero.jpg')
+  if (n >= 60 && n <= 62) return base('Chicago Kitchen', 'Chicago, IL', '1–2',
+    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Chicago_Kitchen_hero.jpg')
+  if (n >= 78 && n <= 79) return base('Texas Kitchen', 'Austin, TX', '2–3',
+    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/TX_Kitchen_hero.jpg')
+  return base('Production Kitchen', 'Nearest facility', '2–3',
+    'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Kitchen_hero.jpg')
 }
 
 function getMealMessage(n: number): { text: string; highlight: boolean } {
@@ -95,20 +124,23 @@ function getMealMessage(n: number): { text: string; highlight: boolean } {
 }
 
 export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData) => void }) {
-  const [step, setStep]           = useState<Step>('why')
-  const [why, setWhy]             = useState<WhyId | null>(null)
+  const [step, setStep]               = useState<Step>('why')
+  const [why, setWhy]                 = useState<WhyId | null>(null)
   const [selectedWhy, setSelectedWhy] = useState<WhyId | null>(null)
-  const [zip, setZip]             = useState('')
-  const [name, setName]           = useState('')
-  const [meals, setMeals]         = useState<number | null>(null)
-  const [email, setEmail]         = useState('')
-  const [anim, setAnim]           = useState<'in' | 'out'>('in')
+  const [zip, setZip]                 = useState('')
+  const [name, setName]               = useState('')
+  const [meals, setMeals]             = useState<number>(8)
+  const [mealsChosen, setMealsChosen] = useState(false)
+  const [email, setEmail]             = useState('')
+  const [anim, setAnim]               = useState<'in' | 'out'>('in')
+  const [kitchenImgFailed, setKitchenImgFailed] = useState(false)
 
-  const stepIdx  = STEP_ORDER.indexOf(step)
-  const progress = (stepIdx + 1) / STEP_ORDER.length
+  const stepIdx    = STEP_ORDER.indexOf(step)
+  const progress   = (stepIdx + 1) / STEP_ORDER.length
   const kitchenInfo = zip.length === 5 ? getKitchenInfo(zip) : null
-  const mealMsg     = meals !== null ? getMealMessage(meals) : null
+  const mealMsg     = getMealMessage(meals)
   const firstName   = name.trim().split(' ')[0]
+  const sliderPct   = ((meals - 4) / (12 - 4)) * 100
 
   const go = (next: Step) => {
     setAnim('out')
@@ -125,7 +157,6 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
     setTimeout(() => go('reinforce'), 420)
   }
 
-  // Reinforce screen is dark — flag it
   const isDark = step === 'reinforce'
 
   return (
@@ -176,12 +207,12 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                 <p className="text-cu-slate text-sm mt-2">We'll personalize your experience.</p>
               </div>
 
-              <div className="space-y-2.5 flex-1">
+              <div className="space-y-3 flex-1">
                 {WHY_OPTIONS.map(opt => (
                   <button
                     key={opt.id}
                     onClick={() => handleWhySelect(opt.id)}
-                    className={`w-full text-left px-4 py-4 rounded-2xl border-2 flex items-center gap-4 transition-all duration-150 active:scale-[0.98] ${
+                    className={`w-full text-left px-5 py-5 rounded-2xl border-2 flex items-center gap-4 transition-all duration-150 active:scale-[0.98] ${
                       selectedWhy === opt.id
                         ? 'border-cu-yellow bg-cu-yellow/10'
                         : 'border-cu-line bg-white hover:border-cu-slate/40 hover:shadow-sm'
@@ -190,12 +221,12 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                     <span className={`shrink-0 transition-colors ${selectedWhy === opt.id ? 'text-cu-ink' : 'text-cu-slate'}`}>
                       {opt.icon}
                     </span>
-                    <span className={`font-medium text-[14px] leading-snug transition-colors ${selectedWhy === opt.id ? 'text-cu-ink' : 'text-cu-slate'}`}>
+                    <span className={`font-medium text-[15px] leading-snug transition-colors ${selectedWhy === opt.id ? 'text-cu-ink' : 'text-cu-slate'}`}>
                       {opt.label}
                     </span>
                     {selectedWhy === opt.id && (
-                      <span className="ml-auto shrink-0 w-5 h-5 rounded-full bg-cu-yellow flex items-center justify-center animate-pop-in">
-                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <span className="ml-auto shrink-0 w-6 h-6 rounded-full bg-cu-yellow flex items-center justify-center animate-pop-in">
+                        <svg width="11" height="9" viewBox="0 0 10 8" fill="none">
                           <path d="M1 4l3 3 5-6" stroke="#0F1115" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </span>
@@ -210,21 +241,41 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
           {step === 'reinforce' && why && (() => {
             const r = REINFORCE[why]
             return (
-              <div className="flex flex-col flex-1 justify-between py-4">
-                <div>
+              <div className="flex flex-col flex-1 py-4">
+                <div className="flex-1">
                   <span className="inline-flex items-center gap-2 bg-cu-yellow text-cu-ink text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-8">
                     {r.stat}
                   </span>
-                  <h1 className="font-display text-white leading-tight mb-6" style={{ fontSize: 'clamp(40px, 9vw, 56px)', whiteSpace: 'pre-line' }}>
+                  <h1 className="font-display text-white leading-tight mb-5" style={{ fontSize: 'clamp(40px, 9vw, 56px)', whiteSpace: 'pre-line' }}>
                     {r.headline}
                   </h1>
-                  <p className="text-white/60 text-[16px] leading-relaxed">
+                  <p className="text-white/60 text-[16px] leading-relaxed mb-8">
                     {r.body}
                   </p>
+
+                  {/* Chef portrait strip */}
+                  <div className="overflow-x-auto -mx-6 px-6 pb-1">
+                    <div className="flex gap-3" style={{ width: 'max-content' }}>
+                      {CHEF_PORTRAITS.map(chef => (
+                        <div key={chef.name} className="relative w-[88px] h-[120px] rounded-2xl overflow-hidden shrink-0 bg-white/10">
+                          <img
+                            src={chef.photo}
+                            alt={chef.name}
+                            className="w-full h-full object-cover object-top"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                          <p className="absolute bottom-2 left-2 right-2 text-white text-[10px] font-semibold leading-tight">
+                            {chef.name.split(' ')[0]}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+
                 <button
                   onClick={() => go('location')}
-                  className="w-full py-4 rounded-2xl bg-white text-cu-ink font-bold text-base mt-10 hover:bg-cu-yellow transition-colors"
+                  className="w-full py-4 rounded-2xl bg-cu-yellow text-cu-ink font-bold text-base mt-8 hover:brightness-105 transition-all"
                 >
                   Continue →
                 </button>
@@ -241,18 +292,16 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                   Where do we deliver to you?
                 </h1>
                 <p className="text-cu-slate text-sm mb-12">Enter your zip code to confirm delivery.</p>
-                <div className="relative">
-                  <input
-                    type="tel"
-                    inputMode="numeric"
-                    maxLength={5}
-                    placeholder="10001"
-                    value={zip}
-                    onChange={e => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
-                    className="w-full text-[52px] font-bold text-center text-cu-ink tracking-[0.25em] border-b-2 border-cu-line focus:border-cu-ink outline-none py-2 bg-transparent transition-colors placeholder:text-cu-line"
-                    autoFocus
-                  />
-                </div>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={5}
+                  placeholder="10001"
+                  value={zip}
+                  onChange={e => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
+                  className="w-full text-[52px] font-bold text-center text-cu-ink tracking-[0.25em] border-b-2 border-cu-line focus:border-cu-ink outline-none py-2 bg-transparent transition-colors placeholder:text-cu-line"
+                  autoFocus
+                />
                 {zip.length === 5 && (
                   <p className="text-center text-[13px] text-cu-green font-semibold mt-5 animate-pop-in">
                     ✓ &nbsp;We deliver to {zip}
@@ -264,7 +313,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                 disabled={zip.length < 5}
                 className={`w-full py-4 rounded-2xl font-bold text-base mt-8 transition-all ${
                   zip.length === 5
-                    ? 'bg-cu-yellow text-cu-ink hover:bg-cu-yellow-deep'
+                    ? 'bg-cu-yellow text-cu-ink hover:brightness-105'
                     : 'bg-cu-line text-cu-slate cursor-not-allowed'
                 }`}
               >
@@ -277,16 +326,48 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
           {step === 'location-confirm' && kitchenInfo && (
             <div className="flex flex-col flex-1 justify-between">
               <div className="mt-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-8">Step 4 of 7</p>
-                <div className="w-12 h-12 rounded-2xl bg-cu-green/10 border border-cu-green/20 flex items-center justify-center mb-6">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M20 7L9 18l-5-5" stroke="#1F7A4D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-5">Step 4 of 7</p>
+
+                {/* Kitchen image card */}
+                <div className="relative h-48 rounded-2xl overflow-hidden mb-6 bg-cu-ink">
+                  {!kitchenImgFailed && (
+                    <img
+                      src={kitchenInfo.imageUrl}
+                      alt={kitchenInfo.kitchen}
+                      className="w-full h-full object-cover"
+                      onError={() => setKitchenImgFailed(true)}
+                    />
+                  )}
+                  {/* Always show gradient + text overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+                  {/* Kitchen badge */}
+                  <div className="absolute top-3 right-3 bg-cu-yellow text-cu-ink text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                    {kitchenInfo.kitchens} kitchens nationwide
+                  </div>
+
+                  {/* Kitchen name */}
+                  <div className="absolute bottom-4 left-4">
+                    <p className="text-white/60 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Your kitchen</p>
+                    <p className="text-white font-bold text-lg leading-tight">{kitchenInfo.kitchen}</p>
+                    <p className="text-white/50 text-xs">{kitchenInfo.city}</p>
+                  </div>
+
+                  {/* If image failed, show a kitchen illustration */}
+                  {kitchenImgFailed && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" className="opacity-20">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M9 22V12h6v10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  )}
                 </div>
-                <h1 className="font-display text-[34px] text-cu-ink leading-tight mb-5">
+
+                <h1 className="font-display text-[32px] text-cu-ink leading-tight mb-4">
                   Great news — we deliver to {zip}.
                 </h1>
-                <p className="text-cu-slate text-[15px] leading-relaxed mb-4">
+                <p className="text-cu-slate text-[15px] leading-relaxed mb-3">
                   Your meals are prepared fresh in {kitchenInfo.kitchen} and shipped
                   refrigerated — <strong className="text-cu-ink font-semibold">never frozen</strong>. Most
                   orders arrive within {kitchenInfo.days} days of being cooked.
@@ -298,7 +379,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
               </div>
               <button
                 onClick={() => go('name')}
-                className="w-full py-4 rounded-2xl bg-cu-yellow text-cu-ink font-bold text-base mt-8 hover:bg-cu-yellow-deep transition-colors"
+                className="w-full py-4 rounded-2xl bg-cu-yellow text-cu-ink font-bold text-base mt-8 hover:brightness-105 transition-all"
               >
                 Continue
               </button>
@@ -328,7 +409,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                 disabled={name.trim().length === 0}
                 className={`w-full py-4 rounded-2xl font-bold text-base mt-8 transition-all ${
                   name.trim().length > 0
-                    ? 'bg-cu-yellow text-cu-ink hover:bg-cu-yellow-deep'
+                    ? 'bg-cu-yellow text-cu-ink hover:brightness-105'
                     : 'bg-cu-line text-cu-slate cursor-not-allowed'
                 }`}
               >
@@ -341,29 +422,44 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
           {step === 'meals' && (
             <div className="flex flex-col flex-1 justify-between">
               <div className="flex-1">
-                <div className="mt-6 mb-8">
+                <div className="mt-6 mb-10">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">Step 6 of 7</p>
                   <h1 className="font-display text-[38px] text-cu-ink leading-tight mb-2">
                     How many meals a week?
                   </h1>
                   <p className="text-cu-slate text-sm">You can change this anytime.</p>
                 </div>
-                <div className="grid grid-cols-3 gap-2.5">
-                  {[4, 5, 6, 7, 8, 9, 10, 11, 12].map(n => (
-                    <button
-                      key={n}
-                      onClick={() => setMeals(n)}
-                      className={`py-5 rounded-2xl font-bold text-2xl transition-all duration-150 active:scale-95 ${
-                        meals === n
-                          ? 'bg-cu-yellow text-cu-ink shadow-card scale-[1.02]'
-                          : 'bg-white text-cu-slate border border-cu-line hover:border-cu-slate/40'
-                      }`}
-                    >
-                      {n}
-                    </button>
-                  ))}
+
+                {/* Big number display */}
+                <div className="text-center mb-8">
+                  <span
+                    key={meals}
+                    className="font-display text-[96px] text-cu-ink leading-none animate-pop-in inline-block"
+                  >
+                    {meals}
+                  </span>
+                  <p className="text-cu-slate text-sm mt-1">meals per week</p>
                 </div>
-                {mealMsg && (
+
+                {/* Slider */}
+                <div className="px-1 mb-2">
+                  <input
+                    type="range"
+                    min={4}
+                    max={12}
+                    step={1}
+                    value={meals}
+                    onChange={e => { setMeals(Number(e.target.value)); setMealsChosen(true) }}
+                    className="meal-slider w-full"
+                    style={{ '--slider-pct': `${sliderPct}%` } as React.CSSProperties}
+                  />
+                  <div className="flex justify-between mt-2 text-[11px] text-cu-slate/60 font-medium">
+                    <span>4</span>
+                    <span>12</span>
+                  </div>
+                </div>
+
+                {mealsChosen && (
                   <div className={`mt-5 p-4 rounded-2xl border transition-all animate-onboard-in ${
                     mealMsg.highlight
                       ? 'bg-cu-yellow/10 border-cu-yellow/40'
@@ -376,14 +472,10 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                   </div>
                 )}
               </div>
+
               <button
                 onClick={() => go('email')}
-                disabled={meals === null}
-                className={`w-full py-4 rounded-2xl font-bold text-base mt-6 transition-all ${
-                  meals !== null
-                    ? 'bg-cu-yellow text-cu-ink hover:bg-cu-yellow-deep'
-                    : 'bg-cu-line text-cu-slate cursor-not-allowed'
-                }`}
+                className="w-full py-4 rounded-2xl font-bold text-base mt-6 bg-cu-yellow text-cu-ink hover:brightness-105 transition-all"
               >
                 Continue
               </button>
@@ -412,18 +504,18 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
               </div>
               <div className="mt-8 space-y-3">
                 <button
-                  onClick={() => onComplete({ why: why!, zip, name, meals: meals ?? 8, email })}
+                  onClick={() => onComplete({ why: why!, zip, name, meals, email })}
                   disabled={!email.includes('@') || !email.includes('.')}
                   className={`w-full py-4 rounded-2xl font-bold text-base transition-all ${
                     email.includes('@') && email.includes('.')
-                      ? 'bg-cu-yellow text-cu-ink hover:bg-cu-yellow-deep'
+                      ? 'bg-cu-yellow text-cu-ink hover:brightness-105'
                       : 'bg-cu-line text-cu-slate cursor-not-allowed'
                   }`}
                 >
                   Show me the menu →
                 </button>
                 <button
-                  onClick={() => onComplete({ why: why!, zip, name, meals: meals ?? 8, email: '' })}
+                  onClick={() => onComplete({ why: why!, zip, name, meals, email: '' })}
                   className="w-full py-3 text-sm text-cu-slate font-medium hover:text-cu-ink transition-colors"
                 >
                   Skip for now
