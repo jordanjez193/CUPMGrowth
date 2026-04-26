@@ -206,6 +206,16 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                 <p className="text-cu-slate text-sm mt-2">We'll personalize your experience.</p>
               </div>
 
+              <div className="flex items-center gap-2 mb-3 px-1">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-cu-green shrink-0">
+                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" strokeWidth="1.8"/>
+                  <path d="M12 8v4l3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                </svg>
+                <p className="text-[12px] text-cu-slate/70">
+                  Select <span className="text-cu-green font-semibold">Food lover</span> to walk through a full demo experience
+                </p>
+              </div>
+
               <div className="grid grid-cols-2 gap-3 flex-1">
                 {WHY_OPTIONS.map(opt => {
                   const selected = selectedWhy === opt.id
@@ -238,11 +248,6 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                         <p className="text-[11px] text-cu-slate/70 mt-1 leading-tight">
                           {opt.subtitle}
                         </p>
-                        {opt.id === 'foodie' && (
-                          <p className="text-[10px] text-cu-green font-semibold mt-2 border border-cu-green/30 rounded-full px-2 py-0.5 inline-block">
-                            ← tap to demo
-                          </p>
-                        )}
                       </div>
                     </button>
                   )
