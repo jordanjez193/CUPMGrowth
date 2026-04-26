@@ -208,7 +208,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                 <p className="text-cu-slate text-sm mt-2">We'll personalize your experience.</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 flex-1">
+              <div className="grid grid-cols-2 gap-3">
                 {WHY_OPTIONS.map(opt => {
                   const selected = selectedWhy === opt.id
                   const card = (
