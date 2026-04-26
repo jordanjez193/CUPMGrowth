@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 type WhyId = 'busy' | 'foodie' | 'spending' | 'health'
 type Step = 'why' | 'reinforce' | 'location' | 'location-confirm' | 'name' | 'meals' | 'email'
