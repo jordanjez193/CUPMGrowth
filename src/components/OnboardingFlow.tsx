@@ -206,24 +206,13 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                 <p className="text-cu-slate text-sm mt-2">We'll personalize your experience.</p>
               </div>
 
-              <div className="flex items-center gap-2 mb-3 px-1">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-cu-green shrink-0">
-                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" strokeWidth="1.8"/>
-                  <path d="M12 8v4l3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
-                <p className="text-[12px] text-cu-slate/70">
-                  Select <span className="text-cu-green font-semibold">Food lover</span> to walk through a full demo experience
-                </p>
-              </div>
-
               <div className="grid grid-cols-2 gap-3 flex-1">
                 {WHY_OPTIONS.map(opt => {
                   const selected = selectedWhy === opt.id
-                  return (
+                  const card = (
                     <button
-                      key={opt.id}
                       onClick={() => handleWhySelect(opt.id)}
-                      className={`relative flex flex-col items-center justify-center gap-3 px-4 py-7 rounded-2xl border-2 text-center transition-all duration-150 active:scale-[0.97] ${
+                      className={`relative w-full flex flex-col items-center justify-center gap-3 px-4 py-7 rounded-2xl border-2 text-center transition-all duration-150 active:scale-[0.97] ${
                         selected
                           ? 'border-cu-yellow bg-cu-yellow/10'
                           : 'border-cu-line bg-white hover:border-cu-slate/30 hover:shadow-sm'
@@ -251,6 +240,20 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                       </div>
                     </button>
                   )
+
+                  if (opt.id === 'foodie') {
+                    return (
+                      <div key={opt.id} className="flex flex-col gap-1.5">
+                        <p className="text-[11px] text-cu-green font-semibold flex items-center gap-1">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          Select this for a demo walkthrough
+                        </p>
+                        {card}
+                      </div>
+                    )
+                  }
+
+                  return <div key={opt.id}>{card}</div>
                 })}
               </div>
             </div>
