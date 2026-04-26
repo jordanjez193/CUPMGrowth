@@ -24,12 +24,13 @@ const CHEF_PORTRAITS = [
   { name: 'John De Lucie',     photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/John_De_Lucie_0e67d16f7f.png' },
 ]
 
-const WHY_OPTIONS: { id: WhyId; label: string; icon: React.ReactNode }[] = [
+const WHY_OPTIONS: { id: WhyId; title: string; subtitle: string; icon: React.ReactNode }[] = [
   {
     id: 'busy',
-    label: "I'm busy and don't always have time to cook",
+    title: 'Too busy\nto cook',
+    subtitle: 'No shopping, prep, or cleanup',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/>
         <path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
@@ -37,18 +38,20 @@ const WHY_OPTIONS: { id: WhyId; label: string; icon: React.ReactNode }[] = [
   },
   {
     id: 'foodie',
-    label: 'I really enjoy food and want chef-curated meals at home',
+    title: 'Food\nlover',
+    subtitle: 'Chef-curated meals at home',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M18 2v6a3 3 0 01-3 3H9a3 3 0 01-3-3V2M12 11v10M8 22h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
   {
     id: 'spending',
-    label: 'I spend too much eating out',
+    title: 'Save on\ndining out',
+    subtitle: 'Restaurant quality, less cost',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/>
         <path d="M2 10h20" stroke="currentColor" strokeWidth="1.8"/>
       </svg>
@@ -56,9 +59,10 @@ const WHY_OPTIONS: { id: WhyId; label: string; icon: React.ReactNode }[] = [
   },
   {
     id: 'health',
-    label: "I want to make sure I'm eating right",
+    title: 'Eating\nright',
+    subtitle: 'Nutrition-transparent dishes',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M12 22c-4.5-3-9-6.5-9-12a6 6 0 0112 0 6 6 0 0112 0c0 5.5-4.5 9-9 12z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
@@ -207,32 +211,42 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                 <p className="text-cu-slate text-sm mt-2">We'll personalize your experience.</p>
               </div>
 
-              <div className="space-y-3 flex-1">
-                {WHY_OPTIONS.map(opt => (
-                  <button
-                    key={opt.id}
-                    onClick={() => handleWhySelect(opt.id)}
-                    className={`w-full text-left px-5 py-5 rounded-2xl border-2 flex items-center gap-4 transition-all duration-150 active:scale-[0.98] ${
-                      selectedWhy === opt.id
-                        ? 'border-cu-yellow bg-cu-yellow/10'
-                        : 'border-cu-line bg-white hover:border-cu-slate/40 hover:shadow-sm'
-                    }`}
-                  >
-                    <span className={`shrink-0 transition-colors ${selectedWhy === opt.id ? 'text-cu-ink' : 'text-cu-slate'}`}>
-                      {opt.icon}
-                    </span>
-                    <span className={`font-medium text-[15px] leading-snug transition-colors ${selectedWhy === opt.id ? 'text-cu-ink' : 'text-cu-slate'}`}>
-                      {opt.label}
-                    </span>
-                    {selectedWhy === opt.id && (
-                      <span className="ml-auto shrink-0 w-6 h-6 rounded-full bg-cu-yellow flex items-center justify-center animate-pop-in">
-                        <svg width="11" height="9" viewBox="0 0 10 8" fill="none">
-                          <path d="M1 4l3 3 5-6" stroke="#0F1115" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                    )}
-                  </button>
-                ))}
+              <div className="grid grid-cols-2 gap-3 flex-1">
+                {WHY_OPTIONS.map(opt => {
+                  const selected = selectedWhy === opt.id
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => handleWhySelect(opt.id)}
+                      className={`relative flex flex-col items-center justify-center gap-3 px-4 py-7 rounded-2xl border-2 text-center transition-all duration-150 active:scale-[0.97] ${
+                        selected
+                          ? 'border-cu-yellow bg-cu-yellow/10'
+                          : 'border-cu-line bg-white hover:border-cu-slate/30 hover:shadow-sm'
+                      }`}
+                    >
+                      {selected && (
+                        <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-cu-yellow flex items-center justify-center animate-pop-in">
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                            <path d="M1 4l3 3 5-6" stroke="#0F1115" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </span>
+                      )}
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
+                        selected ? 'bg-cu-yellow text-cu-ink' : 'bg-cu-line/50 text-cu-slate'
+                      }`}>
+                        {opt.icon}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[14px] text-cu-ink leading-tight" style={{ whiteSpace: 'pre-line' }}>
+                          {opt.title}
+                        </p>
+                        <p className="text-[11px] text-cu-slate/70 mt-1 leading-tight">
+                          {opt.subtitle}
+                        </p>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             </div>
           )}
