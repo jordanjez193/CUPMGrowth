@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 type WhyId = 'busy' | 'foodie' | 'spending' | 'health'
-type Step = 'why' | 'reinforce' | 'location' | 'location-confirm' | 'name' | 'meals' | 'email'
+type Step = 'why' | 'reinforce' | 'location' | 'location-confirm' | 'name' | 'meals' | 'email' | 'phone'
 
 export type OnboardingData = {
   why: WhyId
@@ -9,9 +9,10 @@ export type OnboardingData = {
   name: string
   meals: number
   email: string
+  phone: string
 }
 
-const STEP_ORDER: Step[] = ['why', 'reinforce', 'location', 'location-confirm', 'name', 'meals', 'email']
+const STEP_ORDER: Step[] = ['why', 'reinforce', 'location', 'location-confirm', 'name', 'meals', 'email', 'phone']
 
 const CHEF_PORTRAITS = [
   { name: 'Esther Choi',       photo: 'https://cu-website-cms-prd.s3.us-east-1.amazonaws.com/Esther_Choi_93538d0d78.png' },
@@ -132,6 +133,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
   const [name, setName]               = useState('')
   const [meals, setMeals]             = useState<number>(8)
   const [email, setEmail]             = useState('')
+  const [phone, setPhone]             = useState('')
   const [anim, setAnim]               = useState<'in' | 'out'>('in')
   const [kitchenImgFailed, setKitchenImgFailed] = useState(false)
 
@@ -156,7 +158,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
     setTimeout(() => go('reinforce'), 420)
   }
 
-  const isDark = step === 'reinforce'
+  const isDark = step === 'reinforce' || step === 'phone'
 
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-300 ${isDark ? 'bg-cu-ink' : 'bg-cu-paper'}`}>
@@ -198,7 +200,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
             <div className="flex flex-col flex-1">
               <div className="mt-6 mb-8">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">
-                  Step 1 of 7
+                  Step 1 of 8
                 </p>
                 <h1 className="font-display text-[38px] text-cu-ink leading-tight">
                   What brings you to CookUnity?
@@ -309,7 +311,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
           {step === 'location' && (
             <div className="flex flex-col flex-1 justify-between">
               <div className="mt-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">Step 3 of 7</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">Step 3 of 8</p>
                 <h1 className="font-display text-[38px] text-cu-ink leading-tight mb-2">
                   Where do we deliver to you?
                 </h1>
@@ -348,7 +350,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
           {step === 'location-confirm' && kitchenInfo && (
             <div className="flex flex-col flex-1 justify-between">
               <div className="mt-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-5">Step 4 of 7</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-5">Step 4 of 8</p>
 
                 {/* Kitchen image card */}
                 <div className="relative h-48 rounded-2xl overflow-hidden mb-6 bg-cu-ink">
@@ -412,7 +414,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
           {step === 'name' && (
             <div className="flex flex-col flex-1 justify-between">
               <div className="mt-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">Step 5 of 7</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">Step 5 of 8</p>
                 <h1 className="font-display text-[38px] text-cu-ink leading-tight mb-2">
                   What should we call you?
                 </h1>
@@ -445,7 +447,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
             <div className="flex flex-col flex-1 justify-between">
               <div className="flex-1">
                 <div className="mt-6 mb-10">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">Step 6 of 7</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-3">Step 6 of 8</p>
                   <h1 className="font-display text-[38px] text-cu-ink leading-tight mb-2">
                     How many meals a week?
                   </h1>
@@ -508,7 +510,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
           {step === 'email' && (
             <div className="flex flex-col flex-1 justify-between">
               <div className="mt-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-6">Almost there</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cu-slate mb-6">Step 7 of 8</p>
                 <h1 className="font-display text-[38px] text-cu-ink leading-tight mb-4">
                   Before we show you the 400+ dishes available this week...
                 </h1>
@@ -526,7 +528,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
               </div>
               <div className="mt-8 space-y-3">
                 <button
-                  onClick={() => onComplete({ why: why!, zip, name, meals, email })}
+                  onClick={() => go('phone')}
                   disabled={!email.includes('@') || !email.includes('.')}
                   className={`w-full py-4 rounded-2xl font-bold text-base transition-all ${
                     email.includes('@') && email.includes('.')
@@ -534,13 +536,76 @@ export function OnboardingFlow({ onComplete }: { onComplete: (d: OnboardingData)
                       : 'bg-cu-line text-cu-slate cursor-not-allowed'
                   }`}
                 >
-                  Show me the menu →
+                  Continue →
                 </button>
                 <button
-                  onClick={() => onComplete({ why: why!, zip, name, meals, email: '' })}
+                  onClick={() => go('phone')}
                   className="w-full py-3 text-sm text-cu-slate font-medium hover:text-cu-ink transition-colors"
                 >
                   Skip for now
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ── PHONE ── */}
+          {step === 'phone' && (
+            <div className="flex flex-col flex-1 justify-between py-4">
+              <div className="flex-1">
+                {/* Offer badge */}
+                <div className="inline-flex items-center gap-2 bg-cu-yellow text-cu-ink text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-8">
+                  Exclusive offer · New members only
+                </div>
+
+                {/* Hero */}
+                <div className="mb-6">
+                  <p className="font-display text-white leading-none" style={{ fontSize: 'clamp(72px, 18vw, 96px)' }}>
+                    50%
+                  </p>
+                  <p className="font-display text-white/60 text-[32px] leading-tight -mt-2">
+                    off your first week.
+                  </p>
+                </div>
+
+                <p className="text-white/55 text-[15px] leading-relaxed mb-10">
+                  Enter your number and we'll text you a one-time promo code — valid for the next 24 hours.
+                </p>
+
+                {/* Phone input */}
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="(555) 000-0000"
+                  value={phone}
+                  onChange={e => {
+                    const digits = e.target.value.replace(/\D/g, '').slice(0, 10)
+                    const fmt = digits.length <= 3 ? digits
+                      : digits.length <= 6 ? `(${digits.slice(0,3)}) ${digits.slice(3)}`
+                      : `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`
+                    setPhone(fmt)
+                  }}
+                  className="w-full text-2xl font-bold text-white border-b-2 border-white/20 focus:border-white outline-none py-2 bg-transparent transition-colors placeholder:text-white/20 placeholder:font-normal"
+                  autoFocus
+                />
+              </div>
+
+              <div className="space-y-3 mt-8">
+                <button
+                  onClick={() => onComplete({ why: why!, zip, name, meals, email, phone })}
+                  disabled={phone.replace(/\D/g,'').length < 10}
+                  className={`w-full py-4 rounded-2xl font-bold text-base transition-all ${
+                    phone.replace(/\D/g,'').length === 10
+                      ? 'bg-cu-yellow text-cu-ink hover:brightness-105'
+                      : 'bg-white/10 text-white/30 cursor-not-allowed'
+                  }`}
+                >
+                  Text me my 50% off code →
+                </button>
+                <button
+                  onClick={() => onComplete({ why: why!, zip, name, meals, email, phone: '' })}
+                  className="w-full py-3 text-sm text-white/40 font-medium hover:text-white/70 transition-colors"
+                >
+                  No thanks, I'll pay full price
                 </button>
               </div>
             </div>
